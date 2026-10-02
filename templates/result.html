@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitBuddy | Your Plan</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="app-body">
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-mark">F</span><span>FitBuddy</span></a>
+    <nav class="topnav">
+      <a href="/feedback?user_id={{ user.user_id }}" class="nav-link">Refine Plan</a>
+      <a href="/view-all-users" class="nav-button">Admin Dashboard <span>↗</span></a>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    {% if message %}
+    <div class="success-banner">
+      <div class="success-check">✓</div>
+      <div><strong>{{ message }}</strong><span>Your latest version is saved and shown below.</span></div>
+    </div>
+    {% endif %}
+    {% if error %}<div class="alert error"><span class="alert-icon">!</span><div>{{ error }}</div></div>{% endif %}
+
+    <section class="profile-hero glass-card">
+      <div>
+        <div class="hero-badge">PERSONALIZED FITNESS PLAN</div>
+        <h1>{{ user.name }}'s <span>7-day plan</span></h1>
+        <p>Designed around your goal, weight, age, and preferred training intensity.</p>
+      </div>
+      <div class="profile-meta">
+        <div><small>USER ID</small><strong>{{ user.user_id }}</strong></div>
+        <div><small>AGE</small><strong>{{ user.age }}</strong></div>
+        <div><small>WEIGHT</small><strong>{{ user.weight }} kg</strong></div>
+      </div>
+      <div class="chips">
+        <span>{{ user.goal }}</span><span>{{ user.intensity }} intensity</span>
+        {% if plan.updated_plan %}<span class="updated-chip">✓ AI Updated</span>{% endif %}
+      </div>
+    </section>
+
+    <section class="result-grid">
+      <article class="glass-card plan-card">
+        <div class="card-topline">
+          <div class="title-with-icon"><span class="mini-icon">◈</span><div><span class="eyebrow">YOUR WORKOUT</span><h2>7-Day Training Plan</h2></div></div>
+          {% if plan.updated_plan %}<span class="status-pill">Updated</span>{% else %}<span class="status-pill original">Original</span>{% endif %}
+        </div>
+        <div class="plan-content">{{ displayed_plan }}</div>
+      </article>
+
+      <aside class="result-sidebar">
+        <section class="glass-card nutrition-card">
+          <div class="side-icon nutrition-icon">♥</div>
+          <span class="eyebrow">NUTRITION TIP</span>
+          <h2>Fuel your progress</h2>
+          <p>{{ plan.nutrition_tip }}</p>
+          <div class="tip-points"><span>✓ Protein-focused</span><span>✓ Hydration & recovery</span></div>
+        </section>
+
+        <section class="glass-card feedback-card">
+          <div class="side-icon feedback-icon">↻</div>
+          <span class="eyebrow">ADAPT YOUR PLAN</span>
+          <h2>Want to change something?</h2>
+          <p>Tell FitBuddy what feels too easy, too hard, or what you want more of.</p>
+          <a class="primary-button compact" href="/feedback?user_id={{ user.user_id }}"><span>Give Feedback</span><span>→</span></a>
+        </section>
+      </aside>
+    </section>
+
+    <div class="bottom-actions">
+      <a href="/" class="text-link">← Create another plan</a>
+      <a href="/view-all-users" class="text-link">View all users →</a>
+    </div>
+  </main>
+</body>
+</html>

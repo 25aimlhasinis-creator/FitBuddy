@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitBuddy | Admin Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="app-body admin-page">
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-mark">F</span><span>FitBuddy</span></a>
+    <nav class="topnav"><a href="/" class="nav-button">+ New Plan</a></nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="admin-heading">
+      <div><div class="hero-badge">COACH / ADMIN VIEW</div><h1>Users & <span>plan history</span></h1><p>Review each user's profile, original plan, feedback, and latest AI-updated plan.</p></div>
+      <div class="admin-count"><strong>{{ users|length }}</strong><span>registered users</span></div>
+    </section>
+
+    {% if not users %}
+    <section class="glass-card empty-state"><div class="empty-icon">◎</div><h2>No users yet</h2><p>Create your first plan from the home page.</p><a class="primary-button compact" href="/"><span>Create first plan</span><span>→</span></a></section>
+    {% endif %}
+
+    <div class="admin-list">
+      {% for user in users %}
+      <section class="glass-card user-card-premium">
+        <div class="user-header">
+          <div class="avatar">{{ user.name[:1]|upper }}</div>
+          <div class="user-main"><div class="user-name-row"><h2>{{ user.name }}</h2><span class="id-pill">{{ user.user_id }}</span></div><p>Age {{ user.age }} · {{ user.weight }} kg · {{ user.goal }} · {{ user.intensity }} intensity</p></div>
+          <form action="/delete-user/{{ user.user_id }}" method="post" onsubmit="return confirm('Delete this user and their plans?')"><button class="danger-button" type="submit">Delete</button></form>
+        </div>
+
+        {% for plan in user.plans %}
+        <details class="plan-history" {% if loop.last %}open{% endif %}>
+          <summary><span>Plan #{{ plan.id }}</span><span class="summary-right">{{ 'Updated' if plan.updated_plan else 'Original' }} · {{ plan.updated_at.strftime('%d %b %Y, %I:%M %p') }}</span></summary>
+          <div class="admin-plan-grid">
+            <div class="history-panel original-panel"><div class="panel-label"><span>ORIGINAL PLAN</span><em>Saved</em></div><div class="plan-content small-plan">{{ plan.original_plan }}</div></div>
+            <div class="history-panel updated-panel"><div class="panel-label"><span>UPDATED PLAN</span><em>{{ 'AI revised' if plan.updated_plan else 'Waiting for feedback' }}</em></div>{% if plan.updated_plan %}<div class="plan-content small-plan">{{ plan.updated_plan }}</div>{% else %}<div class="no-update">No feedback update yet.<a href="/feedback?user_id={{ user.user_id }}">Add feedback →</a></div>{% endif %}</div>
+          </div>
+          {% if plan.feedback %}<div class="feedback-history"><strong>Latest feedback</strong><span>{{ plan.feedback }}</span></div>{% endif %}
+        </details>
+        {% endfor %}
+      </section>
+      {% endfor %}
+    </div>
+  </main>
+</body>
+</html>

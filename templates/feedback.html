@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitBuddy | Feedback</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="app-body">
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-mark">F</span><span>FitBuddy</span></a>
+    <nav class="topnav">
+      <a href="/" class="nav-link">New Plan</a>
+      <a href="/view-all-users" class="nav-button">Admin Dashboard <span>↗</span></a>
+    </nav>
+  </header>
+
+  <main class="feedback-shell">
+    <section class="feedback-intro">
+      <div class="hero-badge">AI PLAN REFINEMENT</div>
+      <h1>Make your plan <span>fit better.</span></h1>
+      <p>Your feedback is used to create a complete revised 7-day plan. Your original plan stays saved so you can compare both versions.</p>
+      <div class="flow-line">
+        <div><b>01</b><span>Tell us what to change</span></div>
+        <i>→</i>
+        <div><b>02</b><span>AI revises all 7 days</span></div>
+        <i>→</i>
+        <div><b>03</b><span>See the updated plan</span></div>
+      </div>
+    </section>
+
+    <section class="glass-card feedback-form-card">
+      <div class="form-heading">
+        <div class="icon-orb feedback-orb">↻</div>
+        <div><span class="eyebrow">YOUR FEEDBACK</span><h2>How should we adjust it?</h2><p>Be specific for better results.</p></div>
+      </div>
+
+      {% if error %}<div class="alert error"><span class="alert-icon">!</span><div>{{ error }}</div></div>{% endif %}
+
+      <form action="/submit-feedback" method="post" class="premium-form">
+        <label class="field">
+          <span>User ID</span>
+          <input name="user_id" required maxlength="50" value="{{ user_id }}" placeholder="e.g. FB001">
+        </label>
+        <label class="field">
+          <span>Your feedback</span>
+          <textarea name="feedback" rows="8" required maxlength="2000" placeholder="Example: Add more cardio, reduce leg exercises on Day 5, and include one extra recovery day."></textarea>
+        </label>
+        <button class="primary-button" type="submit"><span>Update Plan with AI</span><span class="button-arrow">→</span></button>
+      </form>
+      <p class="form-helper">Examples: “More cardio”, “More rest days”, “Make strength workouts easier”, “Add more mobility work”.</p>
+    </section>
+  </main>
+</body>
+</html>
